@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "sweet-sheet": ["../src/index"],
+      "sweet-sheet/*": ["../src/*"]
+    }
+  }
+}
