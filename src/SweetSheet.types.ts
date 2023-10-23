@@ -1,7 +1,8 @@
-export type ChangeEventPayload = {
-  value: string;
-};
+import { ViewProps } from "react-native";
 
 export type SweetSheetViewProps = {
-  name: string;
-};
+  isOpen: boolean;
+  detents?: Detents[];
+} & ViewProps;
+
+type Detents = "medium" | "large" | { fraction: number } | { height: number };
