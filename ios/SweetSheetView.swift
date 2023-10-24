@@ -3,8 +3,15 @@ import SwiftUI
 
 class Props: ObservableObject {
   @Published var isOpen: Bool = false
+  @Published var hideDragIndicator: Bool = false
   @Published var detents: [Any] = []
+  @Published var cornerRadius: CGFloat? = nil
   @Published var children: UIView?
+  @Published var onClose: EventDispatcher
+  
+  init(onClose: EventDispatcher) {
+    self.onClose = onClose
+  }
 }
 
 struct SweetSheetSwiftUIView: View {
@@ -12,18 +19,22 @@ struct SweetSheetSwiftUIView: View {
   
   var body: some View {
     EmptyView()
-      .sheet(isPresented: $props.isOpen) {
-        RepresentableView(view: props.children ?? UIView())
+      .sheet(isPresented: $props.isOpen, onDismiss: {
+        props.onClose()
+      }) {
+        RepresentableView(view: props.children)
           .fixedSize(horizontal: false, vertical: true)
-          .conditionalDetents(props.detents)
+          .sheetDetents(props.detents)
+          .hideDragIndicator(props.hideDragIndicator)
+          .sheetCornerRadius(props.cornerRadius)
       }
   }
 }
 
 struct RepresentableView: UIViewRepresentable {
-  var view: UIView
+  var view: UIView?
   func makeUIView(context: Context) -> UIView {
-    return view
+    return view ?? UIView()
   }
   func updateUIView(_ uiView: UIView, context: Context) {}
 }

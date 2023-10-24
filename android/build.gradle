@@ -53,6 +53,13 @@ afterEvaluate {
 android {
   compileSdkVersion safeExtGet("compileSdkVersion", 33)
 
+  buildFeatures {
+    compose true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion = "1.4.4"
+  }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_11
     targetCompatibility JavaVersion.VERSION_11
@@ -86,4 +93,12 @@ repositories {
 dependencies {
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
+
+  def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
+  implementation composeBom
+  androidTestImplementation composeBom
+  implementation 'androidx.compose.material3:material3:1.1.2'
+  implementation 'androidx.compose.ui:ui'
+  implementation 'androidx.compose.ui:ui-tooling-preview'
+  debugImplementation 'androidx.compose.ui:ui-tooling'
 }
