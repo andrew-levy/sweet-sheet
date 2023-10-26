@@ -1,31 +1,44 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, } from "react-native";
 
 import SweetSheet from "sweet-sheet";
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <View style={styles.container}>
       <Button onPress={() => setIsOpen(true)} title="Open" />
       <SweetSheet
         isOpen={isOpen}
+        cornerRadius={30}
+        // hideDragIndicator
         detents={["medium", "large"]}
-        cornerRadius={40}
         onClose={() => setIsOpen(false)}
       >
         <View
           style={{
+            marginTop: 50,
             paddingHorizontal: 30,
-            alignItems: "center",
           }}
         >
           <Text
-            style={{ fontSize: 30, fontWeight: "bold", textAlign: "center" }}
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              paddingBottom: 10,
+            }}
           >
-            This is a React Native View!
+            Sheet Content!
           </Text>
-          <Button onPress={() => setIsOpen(false)} title="Close" />
+   
+          <Text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+            aliquam, dolor ut aliquet placerat, diam magna placerat lacus, eget
+            facilisis eros erat sit amet risus.
+          </Text>
+          
+          <Button onPress={() => setIsOpen(false)} title="Close b" />
         </View>
       </SweetSheet>
     </View>

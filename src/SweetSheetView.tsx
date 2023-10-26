@@ -1,18 +1,18 @@
 import { requireNativeViewManager } from "expo-modules-core";
 import * as React from "react";
 
+import { View } from "react-native";
 import { SweetSheetViewProps } from "./SweetSheet.types";
 
 const NativeView: React.ComponentType<SweetSheetViewProps> =
   requireNativeViewManager("SweetSheet");
 
 export default function SweetSheetView(props: SweetSheetViewProps) {
-  const { style, ...restProps } = props;
+  const { style, children, ...restProps } = props;
   return (
     <NativeView
       pointerEvents="none"
       style={{
-        ...(style as {}),
         position: "absolute",
         top: 0,
         bottom: 0,
@@ -21,6 +21,8 @@ export default function SweetSheetView(props: SweetSheetViewProps) {
         zIndex: -1000,
       }}
       {...restProps}
-    />
+    >
+      <View>{children}</View>
+    </NativeView>
   );
 }

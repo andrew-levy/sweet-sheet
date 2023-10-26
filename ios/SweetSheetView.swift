@@ -23,14 +23,15 @@ struct SweetSheetSwiftUIView: View {
         props.onClose()
       }) {
         RepresentableView(view: props.children)
-          .fixedSize(horizontal: false, vertical: true)
           .sheetDetents(props.detents)
           .hideDragIndicator(props.hideDragIndicator)
           .sheetCornerRadius(props.cornerRadius)
+//            .fixedSize(horizontal: false, vertical: true)
+
       }
   }
 }
-
+  
 struct RepresentableView: UIViewRepresentable {
   var view: UIView?
   func makeUIView(context: Context) -> UIView {
