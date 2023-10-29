@@ -17,9 +17,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+// @generated begin kotlin-gradle-plugin-dependency - expo prebuild (DO NOT MODIFY) sync-df1989f34dc7e9ca009f9d4df42a3ceec65faf1e
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
+// @generated end kotlin-gradle-plugin-dependency
         classpath('com.android.tools.build:gradle:7.4.2')
         classpath('com.facebook.react:react-native-gradle-plugin')
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
     }
 }
 

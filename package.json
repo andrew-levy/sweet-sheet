@@ -28,7 +28,9 @@
   "author": "Andrew <alevy97@gmail.com> (https://github.com/andrew-levy)",
   "license": "MIT",
   "homepage": "https://github.com/andrew-levy/sweet-sheet#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@expo/config-plugins": "~7.2.2"
+  },
   "devDependencies": {
     "@types/react": "^18.0.25",
     "expo-module-scripts": "^3.0.11",
