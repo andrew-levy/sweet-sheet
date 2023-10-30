@@ -45,6 +45,8 @@ npx expo run:ios
 
 ## Usage
 
+See the [example app](/example).
+
 ```tsx
 import { useState } from "react";
 import { Button, StyleSheet, Text, View, } from "react-native";
