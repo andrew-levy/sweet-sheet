@@ -31,7 +31,7 @@ Next, add the config plugin to your `app.json` or `app.config.js` (for Android o
 
 Then rebuild your app:
 
-```
+```console 
 # Using EAS? run a build in the cloud!
 eas build --platform ios
 
@@ -63,7 +63,7 @@ export default function App() {
         detents={["medium", "large"]}
         onDismiss={() => setIsPresented(false)}
       >
-        <View style={{ marginTop: 50,paddingHorizontal: 30 }}>
+        <View style={{ marginTop: 50, paddingHorizontal: 30 }}>
           <Text>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
             aliquam, dolor ut aliquet placerat, diam magna placerat lacus, eget
