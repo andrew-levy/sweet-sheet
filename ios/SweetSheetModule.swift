@@ -5,9 +5,9 @@ public class SweetSheetModule: Module {
   public func definition() -> ModuleDefinition {
     Name("SweetSheet")
     View(SweetSheetView.self) {
-      Events("onClose")
-      Prop("isOpen") { (view: SweetSheetView, isOpen: Bool?) in
-        view.props.isOpen = isOpen ?? false
+      Events("onDismiss")
+      Prop("isPresented") { (view: SweetSheetView, isPresented: Bool?) in
+        view.props.isPresented = isPresented ?? false
       }
       Prop("detents") {(view: SweetSheetView, detents: [Any]?) in
         view.props.detents = detents ?? []

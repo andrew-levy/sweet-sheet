@@ -1,11 +1,11 @@
 import { ViewProps } from "react-native";
 
 export type SweetSheetViewProps = {
-  isOpen: boolean;
+  isPresented: boolean;
   detents?: ("medium" | "large" | { fraction: number } | { height: number })[];
   hideDragIndicator?: boolean;
   cornerRadius?: number;
-  onClose?: () => void;
+  onDismiss?: () => void;
   children?: React.ReactElement | React.ReactElement[];
 } & ViewProps;
 

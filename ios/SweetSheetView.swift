@@ -2,15 +2,15 @@ import ExpoModulesCore
 import SwiftUI
 
 class Props: ObservableObject {
-  @Published var isOpen: Bool = false
+  @Published var isPresented: Bool = false
   @Published var hideDragIndicator: Bool = false
   @Published var detents: [Any] = []
   @Published var cornerRadius: CGFloat? = nil
   @Published var children: UIView?
-  @Published var onClose: EventDispatcher
+  @Published var onDismiss: EventDispatcher
   
-  init(onClose: EventDispatcher) {
-    self.onClose = onClose
+  init(onDismiss: EventDispatcher) {
+    self.onDismiss = onDismiss
   }
 }
 
@@ -19,8 +19,8 @@ struct SweetSheetSwiftUIView: View {
   
   var body: some View {
     EmptyView()
-      .sheet(isPresented: $props.isOpen, onDismiss: {
-        props.onClose()
+      .sheet(isPresented: $props.isPresented, onDismiss: {
+        props.onDismiss()
       }) {
         RepresentableView(view: props.children)
           .sheetDetents(props.detents)

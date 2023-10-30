@@ -8,9 +8,9 @@ class SweetSheetModule : Module() {
     Name("SweetSheet")
 
     View(SweetSheetView::class) {
-      Events("onClose")
-      Prop("isOpen") { view: SweetSheetView, isOpen: Boolean ->
-          view.updateIsOpen(isOpen)
+      Events("onDismiss")
+      Prop("isPresented") { view: SweetSheetView, isPresented: Boolean ->
+          view.updateIsPresented(isPresented)
       }
     }
   }

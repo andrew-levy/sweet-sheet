@@ -10,11 +10,10 @@ export default function App() {
     <View style={styles.container}>
       <Button onPress={() => setIsOpen(true)} title="Open" />
       <SweetSheet
-        isOpen={isOpen}
+        isPresented={isOpen}
         cornerRadius={30}
-        // hideDragIndicator
         detents={["medium", "large"]}
-        onClose={() => setIsOpen(false)}
+        onDismiss={() => setIsOpen(false)}
       >
         <View
           style={{

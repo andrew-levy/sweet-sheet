@@ -48,16 +48,16 @@ class SweetSheetView(context: Context, appContext: AppContext) : ExpoView(contex
         }
     }
 
-    fun updateIsOpen(isOpen: Boolean) {
+    fun updateIsPresented(isPresented: Boolean) {
         composeSheet.setContent {
-            SweetSheetComposeView(getChildAt(0), isOpen)
+            SweetSheetComposeView(getChildAt(0), isPresented)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SweetSheetComposeView(child: View, isOpen: Boolean) {
+fun SweetSheetComposeView(child: View, isPresented: Boolean) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -94,29 +94,5 @@ fun SweetSheetComposeView(child: View, isOpen: Boolean) {
             }
         }
     }
-//    val sheetState = rememberModalBottomSheetState()
-//    var showBottomSheet by remember { mutableStateOf(true) }
-//    if (showBottomSheet) {
-//        ModalBottomSheet(
-//            onDismissRequest = {
-//                showBottomSheet = false
-//            },
-//            sheetState = sheetState
-//        ) {
-//            // Sheet content
-//            AndroidView(
-//                modifier = Modifier.fillMaxSize(),
-//                factory = { context ->
-//                    TextView(context).apply {
-//                        // Customize the TextView
-//                        textSize = 16f
-//                        setTextColor(0xFF000000.toInt()) // Set text color
-//                        // Set the text
-//                        setText(text)
-//                    }
-//                }
-//            )
-//        }
-//    }
 }
 

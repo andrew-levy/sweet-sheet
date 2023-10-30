@@ -19,18 +19,27 @@ Install the library:
 npx expo install ?????
 ```
 
-Then rebuild your app. If you are using EAS Build, simply run a build using eas-cli.
+Next, add the config plugin to your `app.json` or `app.config.js` (for Android only):
+
+```json
+{
+  "expo": {
+    "plugins": ["sweet-sheet"]
+  }
+}
+```
+
+Then rebuild your app:
 
 ```
+# Using EAS? run a build in the cloud!
 eas build --platform ios
-```
 
-If not, you'll need to rebuild your dev client.
-
-```console
+# Otherwise, prebuild and run a local build
 npx expo prebuild -p ios --clean
 npx expo run:ios
 ```
+
 
 > **_NOTE:_** This library will not work with Expo Go. Use a [custom dev client](https://docs.expo.dev/develop/development-builds/create-a-build/) instead!
 
@@ -43,16 +52,16 @@ import { Button, StyleSheet, Text, View, } from "react-native";
 import SweetSheet from "sweet-sheet";
 
 export default function App() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPresented, setIsPresented] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Button onPress={() => setIsOpen(true)} title="Open" />
+      <Button onPress={() => setIsPresented(true)} title="Open" />
       <SweetSheet
-        isOpen={isOpen}
+        isPresented={isPresented}
         cornerRadius={30}
         detents={["medium", "large"]}
-        onClose={() => setIsOpen(false)}
+        onDismiss={() => setIsPresented(false)}
       >
         <View style={{ marginTop: 50,paddingHorizontal: 30 }}>
           <Text>
@@ -60,7 +69,7 @@ export default function App() {
             aliquam, dolor ut aliquet placerat, diam magna placerat lacus, eget
             facilisis eros erat sit amet risus.
           </Text>
-          <Button onPress={() => setIsOpen(false)} title="Close" />
+          <Button onPress={() => setIsPresented(false)} title="Dismiss" />
         </View>
       </SweetSheet>
     </View>
@@ -84,9 +93,9 @@ The `SweetSheet` component uses SwiftUI's `.sheet()` modifier to render a native
 
 ### `Props`
 
-#### `isOpen`
+#### `isPresented`
 
-#### `onClose`
+#### `onDismiss`
 
 #### `cornerRadius`
 
@@ -96,3 +105,7 @@ The `SweetSheet` component uses SwiftUI's `.sheet()` modifier to render a native
 
 #### `children`
 
+## TO DO 
+
+- [ ] (Android) Get Compose bottom sheet to work
+- [ ] (iOS) Make sure buttons in children can be pressed within the sheet (currently they can't)
