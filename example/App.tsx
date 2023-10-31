@@ -19,6 +19,7 @@ export default function App() {
           style={{
             marginTop: 50,
             paddingHorizontal: 30,
+
           }}
         >
           <Text
@@ -37,7 +38,7 @@ export default function App() {
             facilisis eros erat sit amet risus.
           </Text>
           
-          <Button onPress={() => setIsOpen(false)} title="Close b" />
+          <Button onPress={() => setIsOpen(false)} title="Dismiss" />
         </View>
       </SweetSheet>
     </View>

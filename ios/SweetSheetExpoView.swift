@@ -3,7 +3,7 @@ import SwiftUI
 
 class SweetSheetView: ExpoView {
   let props: Props
-  let onClose = EventDispatcher()
+  let onDismiss = EventDispatcher()
   
   override func didUpdateReactSubviews() {
     let subChildren = self.reactSubviews()
@@ -11,7 +11,7 @@ class SweetSheetView: ExpoView {
   }
 
   required init(appContext: AppContext? = nil) {
-    props = Props(onClose: onClose)
+    props = Props(onDismiss: onDismiss)
     let hostingController = UIHostingController(rootView: SweetSheetSwiftUIView(props: props))
 
     super.init(appContext: appContext)

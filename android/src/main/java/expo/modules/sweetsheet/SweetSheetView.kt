@@ -3,34 +3,30 @@ package expo.modules.sweetsheet
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.unit.dp
 import expo.modules.kotlin.AppContext
 import expo.modules.kotlin.viewevent.EventDispatcher
+import expo.modules.kotlin.viewevent.ViewEventCallback
 import expo.modules.kotlin.views.ExpoView
-import kotlinx.coroutines.launch
 
 class SweetSheetView(context: Context, appContext: AppContext) : ExpoView(context, appContext) {
-    private val onClose by EventDispatcher()
+    private val onDismiss by EventDispatcher()
 
     internal val composeSheet = ComposeView(context).also {
         addView(it)
@@ -43,54 +39,81 @@ class SweetSheetView(context: Context, appContext: AppContext) : ExpoView(contex
             child.measuredWidth, child.measuredHeight
         )
 
+//        (child.parent as ViewGroup).removeView(child)
+
         it.setContent {
-            SweetSheetComposeView(child, false)
+            SweetSheetComposeView(
+                child = child,
+                isPresented = false,
+                detents = true,
+                cornerRadius = 40,
+                hideDragIndicator = false,
+                onDismiss = onDismiss
+            )
         }
     }
 
     fun updateIsPresented(isPresented: Boolean) {
         composeSheet.setContent {
-            SweetSheetComposeView(getChildAt(0), isPresented)
+            SweetSheetComposeView(
+                child = getChildAt(0),
+                isPresented = isPresented,
+                detents = true,
+                cornerRadius = 40,
+                hideDragIndicator = false,
+                onDismiss = onDismiss
+            )
         }
     }
 }
 
+class SweetSheetState {
+    var isPresented: Boolean = false
+    var hideDragIndicator: Boolean = false
+    var detents: Boolean = false
+    var cornerRadius: Int = 0
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SweetSheetComposeView(child: View, isPresented: Boolean) {
+fun SweetSheetComposeView(
+    child: View,
+    isPresented: Boolean,
+    hideDragIndicator: Boolean,
+    detents: Boolean,
+    cornerRadius: Int,
+    onDismiss: ViewEventCallback<Map<String, Any>>
+) {
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(false) }
-    Scaffold(
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Show bottom sheet") },
-                icon = { Icon(Icons.Filled.Add, contentDescription = "") },
-                onClick = {
-                    showBottomSheet = true
-                }
-            )
-        }
-    ) { contentPadding ->
-        // Screen content
+    var showBottomSheet by remember { mutableStateOf(isPresented) }
 
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState
-            ) {
-                // Sheet content
-                Button(onClick = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
-                    }
-                }) {
-                    Text("Hide bottom sheet")
+    DisposableEffect(isPresented) {
+        showBottomSheet = isPresented
+        onDispose { }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                onDismiss(mapOf("dismissed" to true))
+                showBottomSheet = false
+            },
+            sheetState = sheetState,
+            shape = RoundedCornerShape(
+                topStart = cornerRadius.dp,
+                topEnd = cornerRadius.dp
+            ),
+            dragHandle = {
+                if (hideDragIndicator) {
+                    null
+                } else {
+                    BottomSheetDefaults.DragHandle()
                 }
+            },
+
+            ) {
+            Column(modifier = Modifier.height(300.dp)) {
+                Text("Sheet content")
             }
         }
     }
