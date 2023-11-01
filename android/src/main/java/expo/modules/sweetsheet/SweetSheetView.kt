@@ -1,25 +1,24 @@
 package expo.modules.sweetsheet
 
 import android.content.Context
+import android.graphics.Canvas
 import android.view.View
-import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import expo.modules.kotlin.AppContext
 import expo.modules.kotlin.viewevent.EventDispatcher
 import expo.modules.kotlin.viewevent.ViewEventCallback
@@ -27,93 +26,90 @@ import expo.modules.kotlin.views.ExpoView
 
 class SweetSheetView(context: Context, appContext: AppContext) : ExpoView(context, appContext) {
     private val onDismiss by EventDispatcher()
+    private val uiState = mutableStateOf(SweetSheetState())
+    private var isViewInvalidated = false
 
-    internal val composeSheet = ComposeView(context).also {
-        addView(it)
-        it.layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-        )
-        val child = getChildAt(0) as ViewGroup
-        child.layoutParams = LayoutParams(
-            child.measuredWidth, child.measuredHeight
-        )
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        if (changed) { isViewInvalidated = true }
+        return
+    }
 
-//        (child.parent as ViewGroup).removeView(child)
+    override fun dispatchDraw(canvas: Canvas) {
+        super.dispatchDraw(canvas)
+        if (isViewInvalidated) {
+            val child = getChildAt(0)
+            removeView(child)
+            uiState.value = uiState.value.copy(child = child)
+            isViewInvalidated = false;
+        }
+    }
 
-        it.setContent {
-            SweetSheetComposeView(
-                child = child,
-                isPresented = false,
-                detents = true,
-                cornerRadius = 40,
-                hideDragIndicator = false,
-                onDismiss = onDismiss
-            )
+    init {
+        ComposeView(context).also {
+            addView(it)
+            it.layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT,)
+            it.setContent {
+                SweetSheetComposeView(
+                    state = uiState,
+                    onDismiss = onDismiss
+                )
+            }
         }
     }
 
     fun updateIsPresented(isPresented: Boolean) {
-        composeSheet.setContent {
-            SweetSheetComposeView(
-                child = getChildAt(0),
-                isPresented = isPresented,
-                detents = true,
-                cornerRadius = 40,
-                hideDragIndicator = false,
-                onDismiss = onDismiss
-            )
-        }
+        uiState.value = uiState.value.copy(isPresented = isPresented)
+    }
+    fun updateHideDragIndicator(hideDragIndicator: Boolean) {
+        uiState.value = uiState.value.copy(hideDragIndicator = hideDragIndicator)
+    }
+    fun updateCornerRadius(cornerRadius: Int?) {
+        uiState.value = uiState.value.copy(cornerRadius = cornerRadius)
     }
 }
 
-class SweetSheetState {
-    var isPresented: Boolean = false
-    var hideDragIndicator: Boolean = false
-    var detents: Boolean = false
-    var cornerRadius: Int = 0
-}
+data class SweetSheetState(
+    var isPresented: Boolean = false,
+    var hideDragIndicator: Boolean = false,
+    var detents: Boolean = false,
+    var cornerRadius: Int? = null,
+    var child: View? = null,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SweetSheetComposeView(
-    child: View,
-    isPresented: Boolean,
-    hideDragIndicator: Boolean,
-    detents: Boolean,
-    cornerRadius: Int,
+    state: MutableState<SweetSheetState>,
     onDismiss: ViewEventCallback<Map<String, Any>>
 ) {
     val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember { mutableStateOf(isPresented) }
-
-    DisposableEffect(isPresented) {
-        showBottomSheet = isPresented
-        onDispose { }
-    }
-
-    if (showBottomSheet) {
+    if (state.value.isPresented) {
         ModalBottomSheet(
             onDismissRequest = {
                 onDismiss(mapOf("dismissed" to true))
-                showBottomSheet = false
             },
             sheetState = sheetState,
-            shape = RoundedCornerShape(
-                topStart = cornerRadius.dp,
-                topEnd = cornerRadius.dp
-            ),
-            dragHandle = {
-                if (hideDragIndicator) {
-                    null
-                } else {
-                    BottomSheetDefaults.DragHandle()
-                }
+            shape = if (state.value.cornerRadius == null) {
+                BottomSheetDefaults.ExpandedShape
+            } else {
+                RoundedCornerShape(
+                    topStart = state.value.cornerRadius?.dp ?: 0.dp,
+                    topEnd = state.value.cornerRadius?.dp ?: 0.dp,
+                )
             },
-
+            dragHandle = {
+                if (!state.value.hideDragIndicator) {
+                    BottomSheetDefaults.DragHandle()
+                } else null
+            },
             ) {
             Column(modifier = Modifier.height(300.dp)) {
-                Text("Sheet content")
+                state.value.child?.let { child ->
+                    AndroidView(
+                        modifier = Modifier.fillMaxSize(),
+                        factory = { child },
+                    )
+                }
             }
         }
     }

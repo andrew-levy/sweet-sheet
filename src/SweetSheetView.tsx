@@ -22,7 +22,7 @@ export default function SweetSheetView(props: SweetSheetViewProps) {
       }}
       {...restProps}
     >
-      <View>{children}</View>
+      <View style={{backgroundColor: "transparent"}}>{children}</View>
     </NativeView>
   );
 }

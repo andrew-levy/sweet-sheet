@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, View, } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 import SweetSheet from "sweet-sheet";
 
@@ -11,17 +11,12 @@ export default function App() {
       <Button onPress={() => setIsOpen(true)} title="Open" />
       <SweetSheet
         isPresented={isOpen}
-        cornerRadius={30}
+        cornerRadius={20}
+        hideDragIndicator={false}
         detents={["medium", "large"]}
         onDismiss={() => setIsOpen(false)}
       >
-        <View
-          style={{
-            marginTop: 50,
-            paddingHorizontal: 30,
-
-          }}
-        >
+        <View style={{backgroundColor: "pink", padding: 20}}>
           <Text
             style={{
               fontSize: 30,
@@ -29,7 +24,7 @@ export default function App() {
               paddingBottom: 10,
             }}
           >
-            Sheet Content!
+            Sheet Content!!
           </Text>
    
           <Text>

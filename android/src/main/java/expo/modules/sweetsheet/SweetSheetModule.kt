@@ -9,8 +9,14 @@ class SweetSheetModule : Module() {
 
     View(SweetSheetView::class) {
       Events("onDismiss")
-      Prop("isPresented") { view: SweetSheetView, isPresented: Boolean ->
-          view.updateIsPresented(isPresented)
+      Prop("isPresented") { view: SweetSheetView, isPresented: Boolean? ->
+        view.updateIsPresented(isPresented ?: false)
+      }
+      Prop("hideDragIndicator") { view: SweetSheetView, hideDragIndicator: Boolean? ->
+        view.updateHideDragIndicator(hideDragIndicator ?: false)
+      }
+      Prop("cornerRadius") { view: SweetSheetView, cornerRadius: Int? ->
+        view.updateCornerRadius(cornerRadius ?: null)
       }
     }
   }
