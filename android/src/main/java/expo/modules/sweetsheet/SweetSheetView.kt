@@ -5,8 +5,7 @@ import android.graphics.Canvas
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +46,7 @@ class SweetSheetView(context: Context, appContext: AppContext) : ExpoView(contex
     init {
         ComposeView(context).also {
             addView(it)
-            it.layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT,)
+            it.layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
             it.setContent {
                 SweetSheetComposeView(
                     state = uiState,
@@ -71,7 +70,6 @@ class SweetSheetView(context: Context, appContext: AppContext) : ExpoView(contex
 data class SweetSheetState(
     var isPresented: Boolean = false,
     var hideDragIndicator: Boolean = false,
-    var detents: Boolean = false,
     var cornerRadius: Int? = null,
     var child: View? = null,
 )
@@ -101,12 +99,12 @@ fun SweetSheetComposeView(
                 if (!state.value.hideDragIndicator) {
                     BottomSheetDefaults.DragHandle()
                 } else null
-            },
+            }
             ) {
-            Column(modifier = Modifier.height(300.dp)) {
+            Column {
                 state.value.child?.let { child ->
                     AndroidView(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxHeight(),
                         factory = { child },
                     )
                 }

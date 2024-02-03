@@ -26,8 +26,6 @@ struct SweetSheetSwiftUIView: View {
           .sheetDetents(props.detents)
           .hideDragIndicator(props.hideDragIndicator)
           .sheetCornerRadius(props.cornerRadius)
-//            .fixedSize(horizontal: false, vertical: true)
-
       }
   }
 }
@@ -39,3 +37,4 @@ struct RepresentableView: UIViewRepresentable {
   }
   func updateUIView(_ uiView: UIView, context: Context) {}
 }
+
