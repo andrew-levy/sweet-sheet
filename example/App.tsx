@@ -6,7 +6,6 @@ import SweetSheet from "sweet-sheet";
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(true);
-  hideAsync();
 
   return (
     <View style={styles.container}>
@@ -15,7 +14,7 @@ export default function App() {
         isPresented={isOpen}
         cornerRadius={20}
         hideDragIndicator={false}
-        detents={["medium", "large"]}
+        detents={["medium", "large", { height: 100 }, { fraction: 0.1 }]}
         onDismiss={() => setIsOpen(false)}
       >
         <View style={{ padding: 20, marginTop: 20 }}>
@@ -24,6 +23,7 @@ export default function App() {
               fontSize: 30,
               fontWeight: "bold",
               paddingBottom: 10,
+              textAlign: "center",
             }}
           >
             Sheet Content!!
@@ -40,6 +40,7 @@ export default function App() {
             }}
             title="Dismiss"
           />
+          <View style={{ height: 20 }} />
         </View>
       </SweetSheet>
       <Text>Open up App.tsx to start working on your app!</Text>
